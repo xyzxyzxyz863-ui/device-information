@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ultimate Device Intelligence – by Guru</title>
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121a33; --accent:#00eaff; --text:#e9ecff; --muted:#9aa3d1; --danger:#ff7b7b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:radial-gradient(1200px 600px at 10% -10%, #1a2b6d 0%, transparent 50%),
+                 radial-gradient(800px 500px at 110% 10%, #0bbcd6 0%, transparent 40%),
+                 var(--bg);
+      color:var(--text);
+    }
+    header{
+      padding:18px 16px; text-align:center; border-bottom:1px solid #1f2a55;
+    }
+    header h1{margin:0; font-size:22px}
+    header p{margin:6px 0 0; color:var(--muted); font-size:13px}
+    .wrap{max-width:1100px; margin:auto; padding:16px}
+    .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px}
+    .card{
+      background:linear-gradient(180deg, #141d3f, #0f1630);
+      border:1px solid #1f2a55; border-radius:16px; padding:14px; box-shadow:0 10px 30px rgba(0,0,0,.35)
+    }
+    .card h3{margin:0 0 10px; font-size:16px; color:#cfe9ff}
+    .row{display:flex; justify-content:space-between; gap:8px; font-size:14px; padding:6px 0; border-bottom:1px dashed #22306a}
+    .row:last-child{border-bottom:none}
+    .k{color:var(--muted)} .v{font-weight:600}
+    .pill{display:inline-block; padding:4px 10px; border-radius:999px; background:#0b2c38; color:#7ef0ff; font-size:12px}
+    .warn{color:var(--danger); font-size:12px}
+    .actions{display:flex; flex-wrap:wrap; gap:10px; margin:14px 0}
+    button{
+      background:linear-gradient(180deg,#00eaff,#00b7d4);
+      color:#002b35; border:none; border-radius:12px; padding:10px 14px; font-weight:700; cursor:pointer
+    }
+    button.alt{background:#1a2557; color:#d7deff; border:1px solid #2a3a8a}
+    footer{opacity:.85; text-align:center; font-size:12px; color:var(--muted); padding:14px}
+    textarea{width:100%; min-height:120px; background:#0b1230; color:#cfe9ff; border:1px solid #24317a; border-radius:10px; padding:10px}
+  </style>
+</head>
+<body>
+<header>
+  <h1>🔎 Ultimate Device Intelligence</h1>
+  <p>Browser limits के अंदर रहते हुए — maximum possible detection</p>
+</header>
+
+<div class="wrap">
+  <div class="actions">
+    <button onclick="downloadReport()">⬇ Report Download (TXT)</button>
+    <button class="alt" onclick="copyReport()">📋 Copy Report</button>
+    <span class="pill" id="secure">🔐 Privacy Safe</span>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h3>📱 Basic</h3>
+      <div class="row"><span class="k">Device Type</span><span class="v" id="device"></span></div>
+      <div class="row"><span class="k">OS</span><span class="v" id="os"></span></div>
+      <div class="row"><span class="k">OS Version</span><span class="v" id="osv"></span></div>
+      <div class="row"><span class="k">Browser</span><span class="v" id="browser"></span></div>
+      <div class="row"><span class="k">Language</span><span class="v" id="lang"></span></div>
+      <div class="row"><span class="k">Timezone</span><span class="v" id="tz"></span></div>
+    </div>
+
+    <div class="card">
+      <h3>🧠 Hardware (Approx)</h3>
+      <div class="row"><span class="k">CPU Cores</span><span class="v" id="cpu"></span></div>
+      <div class="row"><span class="k">RAM</span><span class="v" id="ram"></span></div>
+      <div class="row"><span class="k">Touch</span><span class="v" id="touch"></span></div>
+      <div class="row"><span class="k">GPU Hint</span><span class="v" id="gpu"></span></div>
+      <div class="row"><span class="k">Performance Tier</span><span class="v" id="tier"></span></div>
+    </div>
+
+    <div class="card">
+      <h3>🖥 Display & UI</h3>
+      <div class="row"><span class="k">Resolution</span><span class="v" id="screen"></span></div>
+      <div class="row"><span class="k">Pixel Ratio</span><span class="v" id="dpr"></span></div>
+      <div class="row"><span class="k">Color Scheme</span><span class="v" id="dark"></span></div>
+      <div class="row"><span class="k">Orientation</span><span class="v" id="orient"></span></div>
+    </div>
+
+    <div class="card">
+      <h3>🌐 Network & Power</h3>
+      <div class="row"><span class="k">Online</span><span class="v" id="online"></span></div>
+      <div class="row"><span class="k">Connection</span><span class="v" id="conn"></span></div>
+      <div class="row"><span class="k">Battery</span><span class="v" id="battery"></span></div>
+      <div class="row"><span class="k">Charging</span><span class="v" id="charging"></span></div>
+    </div>
+
+    <div class="card">
+      <h3>🧾 Raw User‑Agent</h3>
+      <textarea id="ua" readonly></textarea>
+      <p class="warn">⚠ Exact model / IMEI / camera access browser से possible नहीं</p>
+    </div>
+
+    <div class="card">
+      <h3>🧪 Sensors (Availability)</h3>
+      <div class="row"><span class="k">Gyroscope</span><span class="v" id="gyro"></span></div>
+      <div class="row"><span class="k">Accelerometer</span><span class="v" id="acc"></span></div>
+      <div class="row"><span class="k">Vibration</span><span class="v" id="vibe"></span></div>
+      <div class="row"><span class="k">Clipboard</span><span class="v" id="clip"></span></div>
+    </div>
+  </div>
+</div>
+
+<footer>© Device Intelligence Demo • Built for learning (Guru)</footer>
+
+<script>
+const ua=navigator.userAgent;
+const set=(i,v)=>document.getElementById(i).innerText=v;
+
+// Device type
+const device=/Tablet/i.test(ua)?'Tablet':(/Mobile|Android|iPhone/i.test(ua)?'Mobile':'Desktop/Laptop');
+set('device',device);
+
+// OS + version
+let os='Unknown', osv='-';
+if(/Android ([0-9._]+)/i.test(ua)){os='Android'; osv=ua.match(/Android ([0-9._]+)/i)[1];}
+else if(/Windows NT ([0-9._]+)/i.test(ua)){os='Windows'; osv=ua.match(/Windows NT ([0-9._]+)/i)[1];}
+else if(/iPhone OS ([0-9_]+)/i.test(ua)){os='iOS'; osv=ua.match(/iPhone OS ([0-9_]+)/i)[1].replace(/_/g,'.');}
+set('os',os); set('osv',osv);
+
+// Browser
+let browser='Unknown';
+if(/Chrome/i.test(ua)&&!/Edge/i.test(ua)) browser='Chrome';
+else if(/Firefox/i.test(ua)) browser='Firefox';
+else if(/Safari/i.test(ua)&&!/Chrome/i.test(ua)) browser='Safari';
+else if(/Edg/i.test(ua)) browser='Edge';
+set('browser',browser);
+
+// Hardware approx
+const cores=navigator.hardwareConcurrency||'Unknown';
+const ram=navigator.deviceMemory?`${navigator.deviceMemory} GB`:'Unknown';
+set('cpu',cores); set('ram',ram);
+set('touch',('ontouchstart'in window)?'Yes':'No');
+
+// GPU hint (WebGL)
+let gpu='Unknown';
+try{const c=document.createElement('canvas');const gl=c.getContext('webgl')||c.getContext('experimental-webgl');
+if(gl){const dbg=gl.getExtension('WEBGL_debug_renderer_info'); if(dbg){gpu=gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL);} }}catch(e){}
+set('gpu',gpu);
+
+// Performance tier (simple heuristic)
+let tier='Low';
+if(cores>=8||navigator.deviceMemory>=6) tier='High';
+else if(cores>=4) tier='Medium';
+set('tier',tier);
+
+// Display
+set('screen',`${screen.width} x ${screen.height}`);
+set('dpr',window.devicePixelRatio||1);
+set('dark',matchMedia('(prefers-color-scheme: dark)').matches?'Dark':'Light');
+set('orient',screen.orientation?screen.orientation.type:'Unknown');
+
+// Network & power
+set('online',navigator.onLine?'Online':'Offline');
+const cn=navigator.connection;
+set('conn',cn?`${cn.effectiveType} / ${cn.downlink}Mb`:'Unknown');
+
+// Battery
+if(navigator.getBattery){navigator.getBattery().then(b=>{
+  document.getElementById('battery').innerText=Math.round(b.level*100)+'%';
+  document.getElementById('charging').innerText=b.charging?'Yes':'No';
+});}else{set('battery','N/A'); set('charging','N/A');}
+
+// Sensors availability
+set('gyro', 'Gyroscope' in window ? 'Available' : 'Check via permission');
+set('acc', 'DeviceMotionEvent' in window ? 'Available' : 'No');
+set('vibe', 'vibrate' in navigator ? 'Yes' : 'No');
+set('clip', navigator.clipboard ? 'Yes' : 'No');
+
+// Lang & tz
+set('lang',navigator.language);
+set('tz',Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+// UA
+document.getElementById('ua').value=ua;
+
+function buildReport(){
+  const lines=[
+    'Ultimate Device Intelligence Report',
+    '---------------------------------',
+    `Device: ${device}`,
+    `OS: ${os} ${osv}`,
+    `Browser: ${browser}`,
+    `CPU Cores: ${cores}`,
+    `RAM: ${ram}`,
+    `GPU Hint: ${gpu}`,
+    `Performance Tier: ${tier}`,
+    `Screen: ${screen.width}x${screen.height} DPR:${window.devicePixelRatio}`,
+    `Touch: ${('ontouchstart'in window)?'Yes':'No'}`,
+    `Online: ${navigator.onLine}`,
+    `Connection: ${cn?cn.effectiveType:'Unknown'}`,
+    `Language: ${navigator.language}`,
+    `Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    `UserAgent: ${ua}`
+  ];
+  return lines.join('\n');
+}
+function downloadReport(){
+  const blob=new Blob([buildReport()],{type:'text/plain'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='device-report.txt'; a.click();
+}
+function copyReport(){ navigator.clipboard.writeText(buildReport()); alert('Report copied'); }
+</script>
+</body>
+</html>
